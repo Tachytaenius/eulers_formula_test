@@ -60,7 +60,7 @@ impl EventHandler for EulersFormulaTest {
         for iteration in 0..self.iterations {
             let iteration_lerp =  iteration as f32 / self.iterations as f32;
             let x = self.x_lower_limit + (self.x_upper_limit - self.x_lower_limit) * iteration_lerp;
-            let ix = Complex::new(0.0, x); // TODO: Multiply x by numbers other than i
+            let ix = Complex::new(0.0, x); // TODO: Multiply x by numbers other than i, draw a hollow red circle for that number
             let output = self.e_replacement.powc(ix);
             let circle = Mesh::new_circle(
                 context,
