@@ -80,6 +80,44 @@ impl EventHandler for EulersFormulaTest {
         )?;
         canvas.draw(&y_axis, DrawParam::default());
 
+        // Draw white dots at 1, i, -1, and -i
+        let circle = Mesh::new_circle(
+            context,
+            DrawMode::fill(),
+            mint::Point2 {x: SCALE + WINDOW_WIDTH as f32 / 2.0, y: WINDOW_HEIGHT as f32 / 2.0},
+            3.0,
+            0.1,
+            Color::WHITE
+        )?;
+        canvas.draw(&circle, DrawParam::default());
+        let circle = Mesh::new_circle(
+            context,
+            DrawMode::fill(),
+            mint::Point2 {x: WINDOW_WIDTH as f32 / 2.0, y: -SCALE + WINDOW_HEIGHT as f32 / 2.0},
+            3.0,
+            0.1,
+            Color::WHITE
+        )?;
+        canvas.draw(&circle, DrawParam::default());
+        let circle = Mesh::new_circle(
+            context,
+            DrawMode::fill(),
+            mint::Point2 {x: -SCALE + WINDOW_WIDTH as f32 / 2.0, y: WINDOW_HEIGHT as f32 / 2.0},
+            3.0,
+            0.1,
+            Color::WHITE
+        )?;
+        canvas.draw(&circle, DrawParam::default());
+        let circle = Mesh::new_circle(
+            context,
+            DrawMode::fill(),
+            mint::Point2 {x: WINDOW_WIDTH as f32 / 2.0, y: SCALE + WINDOW_HEIGHT as f32 / 2.0},
+            3.0,
+            0.1,
+            Color::WHITE
+        )?;
+        canvas.draw(&circle, DrawParam::default());
+
         // Draw small red dot at x = e
         let circle = Mesh::new_circle(
             context,
