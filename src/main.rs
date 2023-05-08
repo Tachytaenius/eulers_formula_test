@@ -29,7 +29,7 @@ impl EulersFormulaTest {
     pub fn new(_context: &mut Context) -> EulersFormulaTest {
         EulersFormulaTest {
             e_replacement: Complex::new(E, 0.0),
-            iterations: 400,
+            iterations: 100,
             x_lower_limit: 0.0,
             x_upper_limit: TAU
         }
@@ -57,6 +57,55 @@ impl EventHandler for EulersFormulaTest {
 
     fn draw(&mut self, context: &mut Context) -> GameResult {
         let mut canvas = graphics::Canvas::from_frame(context, Color::BLACK);
+
+        // Draw axis lines
+        let x_axis = Mesh::new_line(
+            context,
+            &[
+                mint::Point2 {x: 0.0, y: WINDOW_HEIGHT as f32 / 2.0},
+                mint::Point2 {x: WINDOW_WIDTH as f32, y: WINDOW_HEIGHT as f32 / 2.0}
+            ],
+            1.0,
+            Color::WHITE
+        )?;
+        canvas.draw(&x_axis, DrawParam::default());
+        let y_axis = Mesh::new_line(
+            context,
+            &[
+                mint::Point2 {x: WINDOW_WIDTH as f32 / 2.0, y: 0.0},
+                mint::Point2 {x: WINDOW_WIDTH as f32 / 2.0, y: WINDOW_HEIGHT as f32}
+            ],
+            1.0,
+            Color::WHITE
+        )?;
+        canvas.draw(&y_axis, DrawParam::default());
+
+        // Draw small red dot at x = e
+        let circle = Mesh::new_circle(
+            context,
+            DrawMode::fill(),
+            mint::Point2 {x: E * SCALE + WINDOW_WIDTH as f32 / 2.0, y: WINDOW_HEIGHT as f32 / 2.0},
+            1.5,
+            0.1,
+            Color::RED,
+        )?;
+        canvas.draw(&circle, DrawParam::default());
+
+        // Draw e_replacement
+        let circle = Mesh::new_circle(
+            context,
+            DrawMode::fill(),
+            mint::Point2 {
+                x: self.e_replacement.re * SCALE + WINDOW_WIDTH as f32 / 2.0,
+                y: self.e_replacement.im * -SCALE + WINDOW_HEIGHT as f32 / 2.0
+            },
+            3.0,
+            0.1,
+            Color::RED
+        )?;
+        canvas.draw(&circle, DrawParam::default());
+
+        // Draw graph
         for iteration in 0..self.iterations {
             let iteration_lerp =  iteration as f32 / self.iterations as f32;
             let x = self.x_lower_limit + (self.x_upper_limit - self.x_lower_limit) * iteration_lerp;
@@ -65,31 +114,19 @@ impl EventHandler for EulersFormulaTest {
             let circle = Mesh::new_circle(
                 context,
                 DrawMode::fill(),
-                mint::Point2{
+                mint::Point2 {
                     x: output.re * SCALE + WINDOW_WIDTH as f32 / 2.0,
                     y: output.im * -SCALE + WINDOW_HEIGHT as f32 / 2.0
                 },
                 1.0,
                 0.1,
-                Color::WHITE, // TODO: Draw colour interpolated between green and blue by a t of iteration as f32 / self.iterations as f32
+                Color::WHITE, // TODO: Draw colour interpolated between two colours (white and black?) by a t of iteration as f32 / self.iterations as f32
             )?;
             canvas.draw(&circle, DrawParam::default());
         }
+
         println!("{}", self.e_replacement);
-        let circle = Mesh::new_circle(
-            context,
-            DrawMode::fill(),
-            mint::Point2{
-                x: self.e_replacement.re * SCALE + WINDOW_WIDTH as f32 / 2.0,
-                y: self.e_replacement.im * -SCALE + WINDOW_HEIGHT as f32 / 2.0
-            },
-            3.0,
-            0.1,
-            Color::RED,
-        )?;
-        // TODO: Draw small red dot at x = e
-        // TODO: Draw axis lines
-        canvas.draw(&circle, DrawParam::default());
+        
         return canvas.finish(context);
     }
 }
