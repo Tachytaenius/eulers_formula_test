@@ -73,6 +73,8 @@ impl EventHandler for EulersFormulaTest {
             self.i_replacement.im -= change;
         }
 
+        context.gfx.set_window_title("Euler's Formula Constant Replacement Grapher");
+
         return Ok(());
     }
 
