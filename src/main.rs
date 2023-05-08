@@ -1,3 +1,5 @@
+// NOTE: This is my first ggez project, I imagine there are better ways to draw lines etc
+
 use std::f32::consts::E;
 use std::f32::consts::TAU;
 use ggez::*;
