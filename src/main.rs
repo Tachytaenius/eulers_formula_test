@@ -41,9 +41,17 @@ impl EulersFormulaTest {
 impl EventHandler for EulersFormulaTest {
     fn update(&mut self, context: &mut Context) -> GameResult {
         let context_keyboad = &context.keyboard;
-        let change = 0.025; // TODO: In terms of units per second (hertz!) multiplied by delta time
+        let change = 0.5 * context.time.delta().as_secs_f32();
 
-        // TODO: Left mouse held places e_replacement and right mouse held places i_replacement
+        let mouse_position = context.mouse.position();
+        if context.mouse.button_pressed(input::mouse::MouseButton::Left) {
+            self.e_replacement.re = (mouse_position.x - WINDOW_WIDTH as f32 / 2.0) / SCALE;
+            self.e_replacement.im = (mouse_position.y - WINDOW_HEIGHT as f32 / 2.0) / -SCALE;
+        }
+        if context.mouse.button_pressed(input::mouse::MouseButton::Right) {
+            self.i_replacement.re = (mouse_position.x - WINDOW_WIDTH as f32 / 2.0) / SCALE;
+            self.i_replacement.im = (mouse_position.y - WINDOW_HEIGHT as f32 / 2.0) / -SCALE;
+        }
 
         // Update e_replacement with arrow keys
         if context_keyboad.is_key_pressed(KeyCode::Left) {
