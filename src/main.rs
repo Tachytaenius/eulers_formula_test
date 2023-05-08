@@ -81,6 +81,14 @@ impl EventHandler for EulersFormulaTest {
             self.i_replacement.im -= change;
         }
 
+        // Buttons to reset variables
+        if context_keyboard.is_key_just_pressed(KeyCode::E) {
+            self.e_replacement = Complex::new(E, 0.0);
+        }
+        if context_keyboard.is_key_just_pressed(KeyCode::I) {
+            self.i_replacement = Complex::new(0.0, 1.0);
+        }
+
         context.gfx.set_window_title("Euler's Formula Constant Replacement Grapher");
 
         return Ok(());
