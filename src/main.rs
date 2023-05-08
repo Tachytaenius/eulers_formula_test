@@ -43,6 +43,8 @@ impl EventHandler for EulersFormulaTest {
         let context_keyboad = &context.keyboard;
         let change = 0.025; // TODO: In terms of units per second (hertz!) multiplied by delta time
 
+        // TODO: Left mouse held places e_replacement and right mouse held places i_replacement
+
         // Update e_replacement with arrow keys
         if context_keyboad.is_key_pressed(KeyCode::Left) {
             self.e_replacement.re -= change;
