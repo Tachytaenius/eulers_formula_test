@@ -6,5 +6,5 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-ggez = {path = "../../../Temporary/ggez-devel"}
+ggez = {git = "https://github.com/ggez/ggez/", rev = "07b8586"}
 num = "0.4.0"
