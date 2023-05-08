@@ -40,7 +40,7 @@ impl EulersFormulaTest {
 
 impl EventHandler for EulersFormulaTest {
     fn update(&mut self, context: &mut Context) -> GameResult {
-        let context_keyboad = &context.keyboard;
+        let context_keyboard = &context.keyboard;
         let change = 0.5 * context.time.delta().as_secs_f32();
 
         let mouse_position = context.mouse.position();
@@ -54,30 +54,30 @@ impl EventHandler for EulersFormulaTest {
         }
 
         // Update e_replacement with arrow keys
-        if context_keyboad.is_key_pressed(KeyCode::Left) {
+        if context_keyboard.is_key_pressed(KeyCode::Left) {
             self.e_replacement.re -= change;
         }
-        if context_keyboad.is_key_pressed(KeyCode::Right) {
+        if context_keyboard.is_key_pressed(KeyCode::Right) {
             self.e_replacement.re += change;
         }
-        if context_keyboad.is_key_pressed(KeyCode::Up) {
+        if context_keyboard.is_key_pressed(KeyCode::Up) {
             self.e_replacement.im += change;
         }
-        if context_keyboad.is_key_pressed(KeyCode::Down) {
+        if context_keyboard.is_key_pressed(KeyCode::Down) {
             self.e_replacement.im -= change;
         }
 
         // Update i_replacement with WASD
-        if context_keyboad.is_key_pressed(KeyCode::A) {
+        if context_keyboard.is_key_pressed(KeyCode::A) {
             self.i_replacement.re -= change;
         }
-        if context_keyboad.is_key_pressed(KeyCode::D) {
+        if context_keyboard.is_key_pressed(KeyCode::D) {
             self.i_replacement.re += change;
         }
-        if context_keyboad.is_key_pressed(KeyCode::W) {
+        if context_keyboard.is_key_pressed(KeyCode::W) {
             self.i_replacement.im += change;
         }
-        if context_keyboad.is_key_pressed(KeyCode::S) {
+        if context_keyboard.is_key_pressed(KeyCode::S) {
             self.i_replacement.im -= change;
         }
 
