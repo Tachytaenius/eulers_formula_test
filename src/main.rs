@@ -23,6 +23,7 @@ fn main() {
 struct EulersFormulaTest {
     e_replacement: Complex<f32>,
     i_replacement: Complex<f32>,
+    graph_lines: bool,
     iterations: u32,
     x_lower_limit: f32,
     x_upper_limit: f32
@@ -33,6 +34,7 @@ impl EulersFormulaTest {
         EulersFormulaTest {
             e_replacement: Complex::new(E, 0.0),
             i_replacement: Complex::new(0.0, 1.0),
+            graph_lines: true,
             iterations: 100,
             x_lower_limit: 0.0,
             x_upper_limit: TAU
@@ -89,6 +91,11 @@ impl EventHandler for EulersFormulaTest {
         }
         if context_keyboard.is_key_just_pressed(KeyCode::I) {
             self.i_replacement = Complex::new(0.0, 1.0);
+        }
+
+        // Switch between line mode and point mode
+        if context_keyboard.is_key_just_pressed(KeyCode::L) {
+            self.graph_lines = !self.graph_lines;
         }
 
         context.gfx.set_window_title("Euler's Formula Constant Replacement Grapher");
@@ -209,22 +216,46 @@ impl EventHandler for EulersFormulaTest {
         canvas.draw(&circle, DrawParam::default());
 
         // Draw graph
-        for iteration in 0..self.iterations {
-            let iteration_lerp =  iteration as f32 / self.iterations as f32;
-            let x = self.x_lower_limit + (self.x_upper_limit - self.x_lower_limit) * iteration_lerp;
-            let output = self.e_replacement.powc(self.i_replacement * x);
-            let circle = Mesh::new_circle(
-                context,
-                DrawMode::fill(),
-                mint::Point2 {
+        if self.graph_lines {
+            for iteration in 0..self.iterations {
+                let iteration_lerp =  iteration as f32 / self.iterations as f32;
+                let x = self.x_lower_limit + (self.x_upper_limit - self.x_lower_limit) * iteration_lerp;
+                let output = self.e_replacement.powc(self.i_replacement * x);
+                let circle = Mesh::new_circle(
+                    context,
+                    DrawMode::fill(),
+                    mint::Point2 {
+                        x: output.re * SCALE + WINDOW_WIDTH as f32 / 2.0,
+                        y: output.im * -SCALE + WINDOW_HEIGHT as f32 / 2.0
+                    },
+                    1.0,
+                    0.1,
+                    Color::WHITE, // TODO: Draw colour interpolated between two colours (white and black?) by a t of iteration as f32 / self.iterations as f32
+                )?;
+                canvas.draw(&circle, DrawParam::default());
+            }
+        } else {
+            let mut previous_point: Option<mint::Point2<f32>> = None;
+            for iteration in 0..self.iterations {
+                let iteration_lerp =  iteration as f32 / self.iterations as f32;
+                let x = self.x_lower_limit + (self.x_upper_limit - self.x_lower_limit) * iteration_lerp;
+                let output = self.e_replacement.powc(self.i_replacement * x);
+                let output_point = mint::Point2 {
                     x: output.re * SCALE + WINDOW_WIDTH as f32 / 2.0,
                     y: output.im * -SCALE + WINDOW_HEIGHT as f32 / 2.0
-                },
-                1.0,
-                0.1,
-                Color::WHITE, // TODO: Draw colour interpolated between two colours (white and black?) by a t of iteration as f32 / self.iterations as f32
-            )?;
-            canvas.draw(&circle, DrawParam::default());
+                };
+
+                if previous_point.is_some() {
+                    let plot = Mesh::new_line(
+                        context,
+                        &[previous_point.unwrap(), output_point],
+                        1.0,
+                        Color::WHITE
+                    )?;
+                    canvas.draw(&plot, DrawParam::default());
+                }
+                previous_point = Some(output_point);
+            }
         }
 
         println!("e replacement: {}, i replacement: {}", self.e_replacement, self.i_replacement);
